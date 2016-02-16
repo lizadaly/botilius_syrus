@@ -37,7 +37,6 @@ def find_closest(w, emoji_doc):
     closest_val = 0
     for k in emoji_doc:
         de = emoji_doc[k]['doc']
-#        print(w, w.pos_, de)
         if w.similarity(de) > closest_val:
             closest_val = w.similarity(de)
             closest = k
@@ -53,7 +52,7 @@ def _auth():
     return tweepy.API(auth)
 
 def post_tweet(tweet):
-    print("Posting message {}".format(tweet))
+    # print("Posting message {}".format(tweet))
     api = _auth()
     api.update_status(tweet, lat=41.9000, long=12.5000)
 
@@ -69,7 +68,6 @@ def process_source(line, emoji_doc):
                 if closest_val > VAL_THRESHOLD:
                     if closest['value'] not in emojis:
                         emojis.append(closest['value'])
-                        #print(token, closest['value'], closest, closest_val,)
     if len(emojis) != 0:
         tweet = line + ' '.join(emojis)
     return tweet
