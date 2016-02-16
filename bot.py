@@ -1,5 +1,6 @@
 import random
 import tweepy
+import spacy
 from spacy.en import English
 
 from short_unicode import EMOJI_UNICODE
@@ -44,7 +45,7 @@ def _auth():
 def post_tweet(tweet):
     print("Posting message {}".format(tweet))
     api = _auth()
-    api.update(status=tweet)
+    api.update_status(tweet, lat=41.9000, long=12.5000)
 
 def process_source(line, emoji_doc):
     tweet = None
@@ -69,5 +70,5 @@ if __name__ == '__main__':
     line = random.choice(source)
     tweet = process_source(line, emoji)
     if tweet:
-        #post_tweet(tweet)
-        print(tweet)
+        post_tweet(tweet)
+        #print(tweet)
