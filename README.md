@@ -7,3 +7,5 @@ Uses the excellent <a href="https://spacy.io/">spacy.io</a> library to perform c
 the <a href="https://archive.org/details/moralsayingspub00lymagoog">The Moral Sayings of Publius Syrus, a Roman Slave</a>
 and the Unicode emoji set. I simplified the emoji names to facilitate sense-matching and added some aliases to
 facilitate metonymy.
+
+Tweeting at https://twitter.com/botilius_syrus
