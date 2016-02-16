@@ -1,16 +1,26 @@
+from datetime import datetime, timedelta
 import random
 import tweepy
 import spacy
+import json
+
 from spacy.en import English
 
 from short_unicode import EMOJI_UNICODE
 
 from secret import *
 
-nlp = English()    
-    
+global nlp
+
 INPUT_FILE = 'aphorisms.txt'
 VAL_THRESHOLD = .6
+
+DATE_FORMAT = '%Y-%m-%d'
+START_DATE = '2016-02-16'
+TWEETS_FILE = 'tweets.json'
+GENERATE_TWEETS = False  # Generate the tweets or just post them?
+
+start_date = datetime.strptime(START_DATE, DATE_FORMAT)
 
 def init_emoji():
     emoji_doc = {}
@@ -65,10 +75,24 @@ def process_source(line, emoji_doc):
     return tweet
    
 if __name__ == '__main__':
-    emoji = init_emoji()
-    source = [x.strip() for x in open(INPUT_FILE)]
-    line = random.choice(source)
-    tweet = process_source(line, emoji)
-    if tweet:
-        post_tweet(tweet)
-        #print(tweet)
+
+
+    if GENERATE_TWEETS:
+        nlp = English()    
+        out = []        
+        emoji = init_emoji()
+        source = [x.strip() for x in open(INPUT_FILE)]
+        for i, line in enumerate(source):
+            day = start_date + timedelta(days=i)
+            tweet = process_source(line, emoji)
+            if tweet:
+
+                out.append((day.strftime('%Y-%m-%d'), tweet))
+        json.dump(out, open(TWEETS_FILE, 'w'))                
+    else:
+        today = datetime.now().date()
+        source = json.load(open(TWEETS_FILE, 'r'))
+        for line in source:
+            date, tweet = line
+            if today == datetime.strptime(date, DATE_FORMAT).date():
+                post_tweet(tweet)
